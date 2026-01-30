@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casa Tita | Reservas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    .reservas-container {
+      max-width: 1200px;
+      margin: 80px auto 3rem;
+      padding: 0 2rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+    
+    .reservas-info {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(140, 47, 57, 0.1);
+      margin-top: 0;
+    }
+    
+    .reservas-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .form-group label {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 0.95rem;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(140, 47, 57, 0.1);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .btn-reservar {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+      font-size: 1.1rem;
+    }
+    
+    .btn-reservar:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(140, 47, 57, 0.3);
+    }
+    
+    .btn-cancelar {
+      background: #f5f5f5;
+      color: var(--text);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+    }
+    
+    .btn-cancelar:hover {
+      background: #e0e0e0;
+      transform: translateY(-2px);
+    }
+    
+    .map-container {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(140, 47, 57, 0.1);
+      height: fit-content;
+      margin-top: 0;
+    }
+    
+    #map {
+      height: 400px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 1rem;
+      border: 2px solid #e0e0e0;
+    }
+    
+    .info-details {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid #f0f0f0;
+    }
+    
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .info-icon {
+      background: rgba(212, 163, 115, 0.1);
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.5rem;
+    }
+    
+    .info-text h4 {
+      margin: 0 0 0.3rem 0;
+      color: var(--primary);
+    }
+    
+    .info-text p {
+      margin: 0;
+      color: var(--text-light);
+      font-size: 0.95rem;
+    }
+    
+    .hero-reservas {
+      height: 40vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                  url('sources/Reservaciones.jpg') center/cover no-repeat;
+    }
+    
+    main {
+      position: relative;
+      z-index: 1;
+    }
+    
+    @media (max-width: 992px) {
+      .reservas-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-actions {
+        flex-direction: row;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .reservas-container {
+        padding: 2rem 1rem;
+        margin-top: 60px;
+      }
+      
+      .reservas-info,
+      .map-container {
+        padding: 2rem;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+      }
+      
+      .btn-reservar,
+      .btn-cancelar {
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .form-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="main-nav">
+      <div class="nav-section logo">
+        <a href="index.html">
+          <img class="logo-img" src="sources/Logo2.png" alt="Logo Casa Tita" style="max-width: 180px; height: auto; object-fit: contain;"/>
+        </a>
+      </div>
+      
+      <div class="nav-section-center">
+        <div class="menu-link">
+          <a href="index.html" class="menu-link-item">
+            <span>INICIO</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        
+        <div class="info">
+          <div class="info-box">
+            ABIERTO DE LUNES A VIERNES DE <br>
+            <strong>8AM A 4PM</strong>
+          </div>
+        </div>
+      </div>
+      
+      <div class="nav-section reserve">
+        <a href="reservas.html" class="btn-reserve">RESERVA AQUI</a>
+      </div>
+    </div>
+    <div class="sub-nav">
+      <a href="index.html" class="menu-link-item">
+        <span>INICIO</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero hero-reservas">
+    <div class="hero-overlay">
+      <h1>Reserva tu Mesa</h1>
+      <p>Garantiza tu lugar en Casa Tita</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="reservas-container">
+      <div class="reservas-info">
+        <h2 style="color: var(--primary); margin-bottom: 2rem;">Realiza tu Reserva</h2>
+        
+        <form class="reservas-form" id="reservaForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="nombre">Nombre Completo *</label>
+              <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
+            </div>
+            
+            <div class="form-group">
+              <label for="telefono">Teléfono *</label>
+              <input type="tel" id="telefono" name="telefono" required placeholder="(XXX) XXX-XXXX">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="email">Correo Electrónico *</label>
+            <input type="email" id="email" name="email" required placeholder="tu@email.com">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="fecha">Fecha *</label>
+              <input type="date" id="fecha" name="fecha" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="hora">Hora *</label>
+              <select id="hora" name="hora" required>
+                <option value="">Selecciona hora</option>
+                <option value="08:00">8:00 AM</option>
+                <option value="09:00">9:00 AM</option>
+                <option value="10:00">10:00 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="12:00">12:00 PM</option>
+                <option value="13:00">1:00 PM</option>
+                <option value="14:00">2:00 PM</option>
+                <option value="15:00">3:00 PM</option>
+                <option value="16:00">4:00 PM</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="personas">Número de Personas *</label>
+              <select id="personas" name="personas" required>
+                <option value="">Selecciona</option>
+                <option value="1">1 persona</option>
+                <option value="2">2 personas</option>
+                <option value="3">3 personas</option>
+                <option value="4">4 personas</option>
+                <option value="5">5 personas</option>
+                <option value="6">6 personas</option>
+                <option value="7">7 personas</option>
+                <option value="8">8 personas</option>
+                <option value="9">9+ personas</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="mesa">Tipo de Mesa</label>
+              <select id="mesa" name="mesa">
+                <option value="">Cualquiera</option>
+                <option value="interior">Interior</option>
+                <option value="terraza">Terraza</option>
+                <option value="privada">Área Privada</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="comentarios">Comentarios Especiales</label>
+            <textarea id="comentarios" name="comentarios" rows="3" placeholder="Alergias, celebraciones especiales, requerimientos específicos..."></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button type="submit" class="btn-reservar">Confirmar Reserva</button>
+            <button type="button" class="btn-cancelar" onclick="window.history.back()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="map-container">
+        <h2 style="color: var(--primary); margin-bottom: 1rem;">Nuestra Ubicación</h2>
+        <p style="color: var(--text-light); margin-bottom: 1rem;">Av. Benito Juarez 123 A Privadas de Anáhuac, 66059 Escobedo, N.L., Mexico</p>
+        
+        <div id="map"></div>
+        
+        <div class="info-details">
+          <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-text">
+              <h4>Dirección</h4>
+              <p>Av. Benito Juarez 123 A<br>Privadas de Anáhuac<br>66059 Escobedo, N.L.</p>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">🕒</div>
+            <div class="info-text">
+              <h4>Horario</h4>
+              <p>Lunes a Viernes: 8:00 AM - 4:00 PM<br>Sábado y Domingo: Cerrado</p>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">📞</div>
+            <div class="info-text">
+              <h4>Contacto</h4>
+              <p>Teléfono: (81) 1234 5678<br>Email: info@casatita.com</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© Casa Tita · Reservas</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    function initMap() {
+      const location = [25.77885577717653, -100.27431687425482];
+      const map = L.map('map').setView(location, 15);
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+        maxZoom: 19
+      }).addTo(map);
+      
+      const markerIcon = L.divIcon({
+        html: '<div style="background-color: #8c2f39; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">📍</div>',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
+      });
+      
+      const marker = L.marker(location, { icon: markerIcon }).addTo(map);
+      
+      marker.bindPopup(`
+        <div style="padding: 10px;">
+          <h3 style="margin: 0 0 5px 0; color: #8c2f39;">Casa Tita</h3>
+          <p style="margin: 0; font-size: 14px;">Av. Benito Juarez 123 A<br>Privadas de Anáhuac<br>66059 Escobedo, N.L.</p>
+        </div>
+      `);
+    }
+    
+    document.addEventListener('DOMContentLoaded', initMap);
+    
+    document.getElementById('reservaForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = {
+        nombre: document.getElementById('nombre').value,
+        telefono: document.getElementById('telefono').value,
+        email: document.getElementById('email').value,
+        fecha: document.getElementById('fecha').value,
+        hora: document.getElementById('hora').value,
+        personas: document.getElementById('personas').value,
+        mesa: document.getElementById('mesa').value,
+        comentarios: document.getElementById('comentarios').value
+      };
+      
+      const today = new Date().toISOString().split('T')[0];
+      if (formData.fecha < today) {
+        alert('Por favor selecciona una fecha futura.');
+        return;
+      }
+      
+      alert(`¡Reserva confirmada!\n\nNombre: ${formData.nombre}\nFecha: ${formData.fecha}\nHora: ${formData.hora}:00\nPersonas: ${formData.personas}\n\nTe esperamos en Casa Tita.`);
+      
+      console.log('Datos de reserva:', formData);
+      
+      this.reset();
+      
+      showNotification('✅ Reserva confirmada exitosamente');
+    });
+    
+    const fechaInput = document.getElementById('fecha');
+    const today = new Date().toISOString().split('T')[0];
+    fechaInput.min = today;
+    
+    function showNotification(message) {
+      const existingNotification = document.querySelector('.notification');
+      if (existingNotification) existingNotification.remove();
+      
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.textContent = message;
+      notification.style.cssText = 'position:fixed;top:30px;right:30px;background:linear-gradient(135deg, var(--primary), var(--primary-dark));color:white;padding:1rem 2rem;border-radius:12px;box-shadow:0 10px 25px rgba(140,47,57,0.3);z-index:1001;animation:slideInRight 0.3s ease-out;font-weight:500;';
+      
+      const style = document.createElement('style');
+      style.textContent = '@keyframes slideInRight{from{transform:translateX(100%);opacity:0;}to{transform:translateX(0);opacity:1;}}.notification{animation:slideInRight 0.3s ease-out;}';
+      document.head.appendChild(style);
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>

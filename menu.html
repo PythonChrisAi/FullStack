@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casa Tita | Menú Completo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .card {
+      height: auto !important;
+      min-height: auto !important;
+      padding-bottom: 1.5rem;
+      overflow: hidden;
+    }
+    
+    .card-header {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+      border-radius: 12px 12px 0 0;
+      margin: -2.2rem -2rem 1.5rem -2rem;
+    }
+    
+    .card-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    
+    .card:hover .card-image {
+      transform: scale(1.05);
+    }
+    
+    .card-image-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.4));
+    }
+    
+    .card h3 {
+      margin-top: 0.5rem;
+      height: auto;
+      min-height: 50px;
+    }
+    
+    .ingredients-container {
+      min-height: 60px !important;
+      max-height: none !important;
+      margin: 0.5rem 0 !important;
+    }
+    
+    .size-options {
+      margin: 1rem 0;
+      background: rgba(212, 163, 115, 0.1);
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px solid rgba(212, 163, 115, 0.2);
+    }
+    
+    .size-option {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.8rem 0;
+      padding: 0.5rem 0;
+      font-size: 1rem;
+    }
+    
+    .size-option span {
+      font-weight: 500;
+      color: var(--text);
+    }
+    
+    .size-option strong {
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+    
+    .guarniciones-btn {
+      background: linear-gradient(135deg, var(--secondary), #e6b980);
+      border: none;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 1rem auto;
+      width: 90%;
+      display: block;
+      transition: all 0.3s ease;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 12px rgba(212, 163, 115, 0.3);
+    }
+    
+    .guarniciones-btn:hover {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(140, 47, 57, 0.3);
+    }
+    
+    .guarniciones-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: modalBgIn 0.3s ease-out;
+    }
+    
+    .guarniciones-modal.active {
+      display: flex;
+    }
+    
+    .guarniciones-content {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      max-width: 500px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      animation: modalSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+    }
+    
+    .guarniciones-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--secondary-light);
+    }
+    
+    .guarniciones-header h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin: 0;
+    }
+    
+    .close-guarniciones {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: var(--text-light);
+      cursor: pointer;
+      padding: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    
+    .close-guarniciones:hover {
+      background: #f5f5f5;
+      color: var(--primary);
+    }
+    
+    .guarniciones-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .guarnicion-card {
+      background: rgba(212, 163, 115, 0.08);
+      border-radius: 10px;
+      padding: 1rem;
+      text-align: center;
+      border: 1px solid rgba(212, 163, 115, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .guarnicion-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(212, 163, 115, 0.2);
+      background: rgba(212, 163, 115, 0.12);
+    }
+    
+    .guarnicion-card h5 {
+      margin: 0 0 0.5rem 0;
+      color: var(--primary-dark);
+      font-size: 1rem;
+    }
+    
+    .guarnicion-card p {
+      margin: 0;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+    
+    @keyframes modalBgIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes modalSlideIn {
+      from { 
+        opacity: 0; 
+        transform: translateY(-30px) scale(0.95); 
+      }
+      to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .card-header {
+        height: 150px;
+      }
+      
+      .guarniciones-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .guarniciones-content {
+        padding: 1.5rem;
+        max-height: 85vh;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .card-header {
+        height: 130px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="main-nav">
+      <div class="nav-section logo">
+        <a href="index.html" style="text-decoration: none; color: inherit;">
+          <img class="logo-img" src="sources/Logo2.png" alt="Logo Casa Tita" style="max-width: 180px; height: auto; object-fit: contain;"/>
+        </a>
+      </div>
+      
+      <div class="nav-section-center">
+        <div class="menu-link">
+          <a href="index.html" class="menu-link-item">
+            <span>INICIO</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        
+        <div class="info">
+          <div class="info-box">
+            ABIERTO DE LUNES A VIERNES DE <br>
+            <strong>8AM A 4PM</strong>
+          </div>
+        </div>
+      </div>
+      
+      <div class="nav-section reserve">
+        <a href="reservas.html" class="btn-reserve">RESERVA AQUI</a>
+      </div>
+    </div>
+    <div class="sub-nav">
+      <a href="index.html" class="menu-link-item">
+        <span>INICIO</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero" style="height: 40vh;">
+    <div class="hero-overlay">
+      <h1>Menú Completo</h1>
+      <p>Todos nuestros platillos disponibles</p>
+    </div>
+  </header>
+
+  <main style="padding: 3rem 2rem; max-width: 1200px; margin: 0 auto;">
+    <h2 style="text-align: center; margin-bottom: 3rem; color: var(--primary);">Comidas Caseras</h2>
+    
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Milanesa de res.jpg" alt="Milanesa de Res" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Milanesa Empanizada de Res</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Deliciosa Milanesa de res empanizada
+          </div>
+        </div>
+        
+        <div class="size-options">
+          <div class="size-option">
+            <span>Individual</span>
+            <strong>$80</strong>
+          </div>
+          <div class="size-option">
+            <span>Con Guarniciones</span>
+            <strong>$120</strong>
+          </div>
+          <small style="color: #666; display: block; text-align: center; margin-top: 0.5rem; font-size: 0.85rem;">(+$40 por guarniciones)</small>
+        </div>
+        
+        <button class="guarniciones-btn" onclick="openGuarniciones('Milanesa de Res')">
+          Ver Guarniciones Disponibles
+        </button>
+        
+        <div class="card-footer">
+          <div style="height: 24px;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Albondigas.jpg" alt="Albóndigas" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Albóndigas</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> 3 deliciosas albóndigas de carne molida en su jugo
+          </div>
+        </div>
+        
+        <div class="size-options">
+          <div class="size-option">
+            <span>Individual</span>
+            <strong>$80</strong>
+          </div>
+          <div class="size-option">
+            <span>Con Guarniciones</span>
+            <strong>$120</strong>
+          </div>
+          <small style="color: #666; display: block; text-align: center; margin-top: 0.5rem; font-size: 0.85rem;">(+$40 por guarniciones)</small>
+        </div>
+        
+        <button class="guarniciones-btn" onclick="openGuarniciones('Albóndigas')">
+          Ver Guarniciones Disponibles
+        </button>
+        
+        <div class="card-footer">
+          <div style="height: 24px;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Milanesa de pollo.jpg" alt="Milanesa de Pollo" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Milanesa Empanizada de Pollo</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Deliciosa Milanesa de pollo empanizada
+          </div>
+        </div>
+        
+        <div class="size-options">
+          <div class="size-option">
+            <span>Individual</span>
+            <strong>$80</strong>
+          </div>
+          <div class="size-option">
+            <span>Con Guarniciones</span>
+            <strong>$120</strong>
+          </div>
+          <small style="color: #666; display: block; text-align: center; margin-top: 0.5rem; font-size: 0.85rem;">(+$40 por guarniciones)</small>
+        </div>
+        
+        <button class="guarniciones-btn" onclick="openGuarniciones('Milanesa de Pollo')">
+          Ver Guarniciones Disponibles
+        </button>
+        
+        <div class="card-footer">
+          <div style="height: 24px;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Pechuga Rellena.jpg" alt="Pechuga Rellena" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Pechuga Rellena</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Pechuga empanizada rellena de jamón y queso
+          </div>
+        </div>
+        
+        <div class="size-options">
+          <div class="size-option">
+            <span>Individual</span>
+            <strong>$80</strong>
+          </div>
+          <div class="size-option">
+            <span>Con Guarniciones</span>
+            <strong>$120</strong>
+          </div>
+          <small style="color: #666; display: block; text-align: center; margin-top: 0.5rem; font-size: 0.85rem;">(+$40 por guarniciones)</small>
+        </div>
+        
+        <button class="guarniciones-btn" onclick="openGuarniciones('Pechuga Rellena')">
+          Ver Guarniciones Disponibles
+        </button>
+        
+        <div class="card-footer">
+          <div style="height: 24px;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Chile relleno de Carne.jpg" alt="Chile Relleno de Carne" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Chile Relleno de Carne</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Chile poblano lampreado relleno de carne molida
+          </div>
+        </div>
+        
+        <div class="size-options">
+          <div class="size-option">
+            <span>Individual</span>
+            <strong>$80</strong>
+          </div>
+          <div class="size-option">
+            <span>Con Guarniciones</span>
+            <strong>$120</strong>
+          </div>
+          <small style="color: #666; display: block; text-align: center; margin-top: 0.5rem; font-size: 0.85rem;">(+$40 por guarniciones)</small>
+        </div>
+        
+        <button class="guarniciones-btn" onclick="openGuarniciones('Chile Relleno de Carne')">
+          Ver Guarniciones Disponibles
+        </button>
+        
+        <div class="card-footer">
+          <div style="height: 24px;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Chile relleno de Queso.jpg" alt="Chile Relleno de Queso" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Chile Relleno de Queso</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Chile poblano lampreado relleno de queso
+          </div>
+        </div>
+        
+        <div class="size-options">
+          <div class="size-option">
+            <span>Individual</span>
+            <strong>$80</strong>
+          </div>
+          <div class="size-option">
+            <span>Con Guarniciones</span>
+            <strong>$120</strong>
+          </div>
+          <small style="color: #666; display: block; text-align: center; margin-top: 0.5rem; font-size: 0.85rem;">(+$40 por guarniciones)</small>
+        </div>
+        
+        <button class="guarniciones-btn" onclick="openGuarniciones('Chile Relleno de Queso')">
+          Ver Guarniciones Disponibles
+        </button>
+        
+        <div class="card-footer">
+          <div style="height: 24px;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Pechuga a la plancha.jpg" alt="Milanesa de Pollo a la Plancha" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Milanesa de Pollo a la Plancha</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Milanesa de pollo preparada a la plancha
+          </div>
+        </div>
+        
+        <div class="size-options">
+          <div class="size-option">
+            <span>Individual</span>
+            <strong>$80</strong>
+          </div>
+          <div class="size-option">
+            <span>Con Guarniciones</span>
+            <strong>$120</strong>
+          </div>
+          <small style="color: #666; display: block; text-align: center; margin-top: 0.5rem; font-size: 0.85rem;">(+$40 por guarniciones)</small>
+        </div>
+        
+        <button class="guarniciones-btn" onclick="openGuarniciones('Milanesa de Pollo a la Plancha')">
+          Ver Guarniciones Disponibles
+        </button>
+        
+        <div class="card-footer">
+          <div style="height: 24px;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Enchiladas Suizas.jpg" alt="Enchiladas Suizas" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Enchiladas Suizas</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> 4 deliciosas enchiladas de queso y salsa verde
+          </div>
+        </div>
+        
+        <div class="size-options">
+          <div class="size-option">
+            <span>Individual</span>
+            <strong>$80</strong>
+          </div>
+          <div class="size-option">
+            <span>Con Guarniciones</span>
+            <strong>$120</strong>
+          </div>
+          <small style="color: #666; display: block; text-align: center; margin-top: 0.5rem; font-size: 0.85rem;">(+$40 por guarniciones)</small>
+        </div>
+        
+        <button class="guarniciones-btn" onclick="openGuarniciones('Enchiladas Suizas')">
+          Ver Guarniciones Disponibles
+        </button>
+        
+        <div class="card-footer">
+          <div style="height: 24px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="text-align: center; margin: 5rem 0 3rem; color: var(--primary);">Guarniciones por litro</h2>
+    
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Arroz.jpg" alt="Arroz" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Arroz</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Arroz tradicional preparado con especias
+          </div>
+        </div>
+        <div class="card-footer">
+          <p class="price">$30</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Frijoles.jpg" alt="Frijoles" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Frijoles</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Frijoles de la olla tradicionales
+          </div>
+        </div>
+        <div class="card-footer">
+          <p class="price">$30</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Spaghetti.jpg" alt="Spaghetti" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Spaghetti</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Spaghetti con salsa de tomate casera
+          </div>
+        </div>
+        <div class="card-footer">
+          <p class="price">$30</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Puré.jpg" alt="Puré de Papa" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Puré de Papa</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Puré de papa cremoso con mantequilla
+          </div>
+        </div>
+        <div class="card-footer">
+          <p class="price">$30</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Verduras.jpg" alt="Verduras al Vapor" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Verduras al Vapor</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Verduras mixtas al vapor
+          </div>
+        </div>
+        <div class="card-footer">
+          <p class="price">$30</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="text-align: center; margin: 5rem 0 3rem; color: var(--primary);">Bebidas</h2>
+    
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Coca.png" alt="Coca Cola" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Coca Cola</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Refresco de cola 600ml
+          </div>
+        </div>
+        <div class="card-footer">
+          <p class="price">$25</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Light.png" alt="Coca Cola" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Coca Cola Light</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Refresco de cola sin azúcar 600ml
+          </div>
+        </div>
+        <div class="card-footer">
+          <p class="price">$25</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 style="text-align: center; margin: 5rem 0 3rem; color: var(--primary);">Postres</h2>
+    
+    <div class="grid">
+      <div class="card">
+        <div class="card-header">
+          <img src="sources/Pay de queso.jpg" alt="Pay de Queso" class="card-image">
+          <div class="card-image-overlay"></div>
+        </div>
+        <h3>Pay de Queso Mr. Pay</h3>
+        <div class="ingredients-container">
+          <div class="ingredients-display">
+            <strong>Descripción:</strong> Deliciosa rebanada de pay de queso de Mr. Pay
+          </div>
+        </div>
+        <div class="card-footer">
+          <p class="price">$40</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© Casa Tita · Menú completo</p>
+    <img class="footer-logo" src="sources/Mr.Pay.png" alt="Logo Casa Tita" height="auto" style="max-width: 120px; object-fit: contain;"/>
+  </footer>
+
+  <div id="guarnicionesModal" class="guarniciones-modal">
+    <div class="guarniciones-content">
+      <div class="guarniciones-header">
+        <h4 id="modalPlatilloTitle">Guarniciones Disponibles</h4>
+        <button class="close-guarniciones" onclick="closeGuarniciones()">×</button>
+      </div>
+      <p style="color: var(--text-light); margin-bottom: 1.5rem;">Selecciona hasta 2 guarniciones incluidas:</p>
+      
+      <div class="guarniciones-grid">
+        <div class="guarnicion-card">
+          <h5>Frijoles</h5>
+          <p>Tradicionales de la olla</p>
+        </div>
+        <div class="guarnicion-card">
+          <h5>Papas fritas</h5>
+          <p>Crujientes y doradas</p>
+        </div>
+        <div class="guarnicion-card">
+          <h5>Puré de papa</h5>
+          <p>Cremoso con mantequilla</p>
+        </div>
+        <div class="guarnicion-card">
+          <h5>Arroz</h5>
+          <p>Tradicional con especias</p>
+        </div>
+        <div class="guarnicion-card">
+          <h5>Spaghetti</h5>
+          <p>Con salsa de tomate</p>
+        </div>
+        <div class="guarnicion-card">
+          <h5>Verduras al vapor</h5>
+          <p>Mixtas y frescas</p>
+        </div>
+        <div class="guarnicion-card">
+          <h5>Coditos</h5>
+          <p>Pasta con crema</p>
+        </div>
+      </div>
+      
+      <div style="text-align: center; margin-top: 2rem;">
+        <button class="guarniciones-btn" onclick="closeGuarniciones()" style="width: auto; padding: 0.8rem 2rem;">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openGuarniciones(platilloNombre) {
+      const modal = document.getElementById('guarnicionesModal');
+      const title = document.getElementById('modalPlatilloTitle');
+      title.textContent = `Guarniciones: ${platilloNombre}`;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeGuarniciones() {
+      const modal = document.getElementById('guarnicionesModal');
+      modal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+    
+    document.getElementById('guarnicionesModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeGuarniciones();
+      }
+    });
+    
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeGuarniciones();
+      }
+    });
+  </script>
+</body>
+</html>

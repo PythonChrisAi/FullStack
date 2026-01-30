@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casa Tita | Menú Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="main-nav">
+      <div class="nav-section logo">
+        <img class="logo-img" src="sources/Logo2.png" alt="Logo Casa Tita" />
+      </div>
+      
+      <div class="nav-section-center">
+        <div class="menu-link">
+          <a href="menu.html" class="menu-link-item">
+            <span>PLATILLOS DISPONIBLES</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        
+        <div class="info">
+          <div class="info-box">
+            ABIERTO DE LUNES A VIERNES DE <br>
+            <strong>8AM A 4PM</strong>
+          </div>
+        </div>
+      </div>
+      
+      <div class="nav-section reserve">
+        <a href="reservas.html" class="btn-reserve">RESERVA AQUI</a>
+      </div>
+    </div>
+    <div class="sub-nav">
+      <a href="menu.html" class="menu-link-item">
+        <span>PLATILLOS DISPONIBLES</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-overlay">
+      <h1>Casa Tita</h1>
+      <p>Tradición mexicana con sabor casero</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="menu-section">
+      <h2>Promociones del Día</h2>
+      <p>Descubre nuestras especialidades y promociones exclusivas preparadas con ingredientes frescos y recetas tradicionales.</p>
+
+      <div class="grid">
+        <div class="card" data-ingredients="Incluye dos guarniciones a elegir: arroz, frijoles, papas fritas, puré de papa, spaghetti o verduras al vapor">
+          <h3>Milanesa de Res + 2 Guarniciones</h3>
+          <div class="ingredients-container">
+            <div class="ingredients-display">
+              <strong>Promoción Especial:</strong> 
+            </div>
+          </div>
+          <div class="card-footer">
+            <p class="price">$100</p>
+            <p class="original-price" style="text-decoration: line-through; color: #888; font-size: 0.9rem;">$120 </p>
+          </div>
+        </div>
+
+        <div class="card" data-ingredients="Pechuga empanizada rellena de jamón y queso + 2 guarniciones + bebida incluida">
+          <h3>Pechuga Rellena Completa</h3>
+          <div class="ingredients-container">
+            <div class="ingredients-display">
+              <strong>Promoción Especial:</strong>
+            </div>
+          </div>
+          <div class="card-footer">
+            <p class="price">$75</p>
+            <p class="original-price" style="text-decoration: line-through; color: #888; font-size: 0.9rem;">$80</p>
+          </div>
+        </div>
+
+        <div class="card" data-ingredients="Elige chile relleno de carne o queso + 2 guarniciones + postre Mr. Pay">
+          <h3>Combo Chile Relleno</h3>
+          <div class="ingredients-container">
+            <div class="ingredients-display">
+              <strong>Promoción Especial:</strong> 
+            </div>
+          </div>
+          <div class="card-footer">
+            <p class="price">$130</p>
+            <p class="original-price" style="text-decoration: line-through; color: #888; font-size: 0.9rem;">$160</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© Casa Tita · Menú digital</p>
+  </footer>
+
+
+  <script src="function.js"></script>
+</body>
+</html>
