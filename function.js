@@ -56,24 +56,6 @@ function showNotification(message) {
 let lastScrollTop = 0;
 const navbar = document.querySelector('.navbar');
 
-window.addEventListener('scroll', function() {
-  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-  
-  if (scrollTop > 50) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
-  }
-  
-  if (scrollTop > lastScrollTop && scrollTop > 100) {
-    navbar.classList.add('hidden');
-  } else {
-    navbar.classList.remove('hidden');
-  }
-  
-  lastScrollTop = scrollTop;
-});
-
 navbar.addEventListener('mouseenter', function() {
   navbar.classList.remove('hidden');
 });

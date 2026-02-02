@@ -30,12 +30,40 @@ body {
 }
 
 .navbar {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 100;
+  left: 0;
+  right: 0;
+  z-index: 1000;
   background-color: var(--bg);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   height: auto;
+  width: 100%;
+}
+
+.navbar.floating {
+  top: 20px;
+  left: 5%;
+  right: 5%;
+  width: 90%;
+  border-radius: 4px;
+  border: 2px solid var(--border-color);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.navbar.floating .main-nav {
+  height: 65px;
+  border-bottom: none;
+}
+
+.navbar.floating .logo-img {
+  height: 45px;
+}
+
+.navbar.floating .sub-nav {
+  border-top: 2px solid var(--border-color);
+  border-bottom: none;
 }
 
 .navbar.scrolled {
@@ -752,5 +780,13 @@ footer p {
   
   .reservas-info {
     padding: 2rem;
+  }
+
+  .navbar.floating {
+    top: 10px;
+    left: 2%;
+    right: 2%;
+    width: 96%;
+    border-radius: 4px;
   }
 }

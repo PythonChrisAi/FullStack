@@ -28,6 +28,10 @@
       object-fit: cover;
       transition: transform 0.5s ease;
     }
+
+    .card-image.card-bottom-fix {
+      object-fit: contain;
+    }
     
     .card:hover .card-image {
       transform: scale(1.05);
@@ -644,7 +648,7 @@
     <div class="grid">
       <div class="card">
         <div class="card-header">
-          <img src="sources/Coca.png" alt="Coca Cola" class="card-image">
+          <img src="sources/Coca.png" alt="Coca Cola" class="card-image card-bottom-fix">
           <div class="card-image-overlay"></div>
         </div>
         <h3>Coca Cola</h3>
@@ -660,7 +664,7 @@
 
       <div class="card">
         <div class="card-header">
-          <img src="sources/Light.png" alt="Coca Cola" class="card-image">
+          <img src="sources/Light.jpg" alt="Coca Cola" class="card-image card-bottom-fix">
           <div class="card-image-overlay"></div>
         </div>
         <h3>Coca Cola Light</h3>
@@ -680,7 +684,7 @@
     <div class="grid">
       <div class="card">
         <div class="card-header">
-          <img src="sources/Pay de queso.jpg" alt="Pay de Queso" class="card-image" >
+          <img src="sources/Pay_de_queso_nobg.png" alt="Pay de Queso" class="card-image card-bottom-fix" style="padding: 1rem">
           <div class="card-image-overlay"></div>
           <div class="mrpay-logo-card">
             <img src="sources/Mr.Pay.png" alt="Mr. Pay Logo">
@@ -749,6 +753,8 @@
       </div>
     </div>
   </div>
+
+  <script src="navbar.js"></script>
 
   <script>
     function openGuarniciones(platilloNombre) {
